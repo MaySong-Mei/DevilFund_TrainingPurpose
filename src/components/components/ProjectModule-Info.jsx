@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Text} from "@chakra-ui/react";
+import { Button, SimpleGrid, Text } from "@chakra-ui/react";
 import ProjectCardNew from "@/components/ProjectCard";
 
 function ProjectModuleInfo({ projects }) {
@@ -10,21 +10,24 @@ function ProjectModuleInfo({ projects }) {
         fontSize="lg"
         fontWeight="500"
         mt={10}
-        mb={2}
+        mb={5}
         maxWidth="1370px"
         mx="auto"
         letterSpacing="0.1em"
         fontFamily="'Inter', sans-serif"
         textTransform="uppercase"
         opacity="0.9"
-        // border="1px solid white"
+        transition="text-shadow 0.2s"
         _hover={{
+          textShadow: "0px 0px 8px rgba(255, 255, 255, 0.6)",
           transition: "all 0.2s ease-in-out",
         }}
       >
         On Going Projects
       </Text>
-      <Box  
+      <Button
+        as="div"
+        variant="unstyled"
         display="flex"
         justifyContent="center"
         maxWidth="1500px"
@@ -38,7 +41,7 @@ function ProjectModuleInfo({ projects }) {
             />
           ))}
         </SimpleGrid>
-      </Box>
+      </Button>
     </>
   );
 }
