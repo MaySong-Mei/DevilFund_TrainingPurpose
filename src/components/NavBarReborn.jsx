@@ -27,6 +27,9 @@ function FixedNavBar() {
   ];
   
   const navigate = useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState('up');
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [isAtTop, setIsAtTop] = useState(true);
   const [activeSection, setActiveSection] = useState('');
   const [isNavigating, setIsNavigating] = useState(false);
@@ -66,29 +69,45 @@ function FixedNavBar() {
     }
   };
 
-  // 修改状态检测逻辑
+  // 检测当前活跃section
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const firstSectionElement = document.getElementById('first-section');
+      const threshold = window.innerHeight * 0.5;
       
-      // 检查是否在第一页内
-      // 在这里修改偏移量 300 以调整进入位置导航模式的位置
-      const isInFirstSection = firstSectionElement ? 
-        currentScrollY < (firstSectionElement.offsetTop - 300) : false;
-      
-      // 设置是否在顶部
       setIsAtTop(currentScrollY === 0);
       
-      // 设置导航模式
-      if (isInFirstSection) {
-        setIsPositionNav(false); // 在第一页内使用页面导航
-      } else {
-        setIsPositionNav(true);  // 离开第一页后使用位置导航
-      }
+      // 修改滚动方向和位置导航模式的处理逻辑
+      if (!isNavigating) {
+        if (currentScrollY > lastScrollY) {
+          setScrollDirection('down');
+        } else {
+          setScrollDirection('up');
+          // 当向上滚动且不在位置导航区域内时，退出位置导航模式
+          const isInPositionNavArea = sectionNavItems.some(({ id }) => {
+            const element = document.getElementById(id);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              const navHeight = 80;
+              return rect.top <= navHeight + 50 && rect.bottom >= navHeight;
+            }
+            return false;
+          });
 
-      // 检测当前活跃section（仅在位置导航模式下需要）
-      if (!isInFirstSection) {
+          if (!isInPositionNavArea) {
+            setIsPositionNav(false);
+          }
+        }
+      }
+      
+      setIsScrolled(currentScrollY > threshold);
+      setLastScrollY(currentScrollY);
+
+      // 检测当前可见的section
+      if (currentScrollY === 0) {
+        setActiveSection('top');
+        setIsPositionNav(false); // 确保在顶部时退出位置导航模式
+      } else {
         sectionNavItems.forEach(({ id }) => {
           const element = document.getElementById(id);
           if (element) {
@@ -104,35 +123,40 @@ function FixedNavBar() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [sectionNavItems]); // 只依赖 sectionNavItems
+  }, [lastScrollY, isNavigating, sectionNavItems]); // 添加 sectionNavItems 作为依赖
 
-  // 简化导航栏样式逻辑
-  const navStyles = isPositionNav ? 
-    {
-      // 位置导航模式 - 完全透明背景
-      backgroundColor: "transparent",
-      backdropFilter: "none",
-      height: "6vh",
-      transition: "all 0.3s ease"
-    } : 
-    (isAtTop ? {
-      // 页面导航模式且在顶部 - 完全透明
+  // 根据滚动状态设置不同样式
+  const navStyles = isScrolled ? 
+    (scrollDirection === 'down' ? {
+      // 向下滚时的样式 - 完全透明背景
       backgroundColor: "transparent",
       backdropFilter: "none",
       height: "6vh",
       transition: "all 0.3s ease"
     } : {
-      // 页面导航模式且不在顶部 - 毛玻璃效果
+      // 向上滚动时的样式 - 毛玻璃效果
       backdropFilter: "blur(15px)",
       backgroundColor: "rgba(255, 255, 255, 0.15)",
       height: "6vh",
       boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
       borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
       transition: "all 0.3s ease"
+    }) : 
+    (isAtTop ? {
+    // 在顶部时的样式 - 完全透明，无边框和阴影
+    backgroundColor: "transparent",
+    backdropFilter: "none",
+    height: "6vh",
+    transition: "all 0.3s ease"
+  } : {
+      // 初始样式但不在顶部
+    backdropFilter: "blur(15px)",
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    height: "6vh",
+    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+    transition: "all 0.3s ease"
     });
-
-  // 简化 showPillNav 逻辑
-  const showPillNav = isPositionNav;
 
   // Add media query for portrait mode
   const portraitNavStyles = {
@@ -140,6 +164,9 @@ function FixedNavBar() {
       height: '4vh', // Adjust this value as needed
     }
   };
+
+  // 判断是否显示胶囊式导航
+  const showPillNav = isScrolled && (scrollDirection === 'down' || isNavigating || isPositionNav);
 
   // Apply 按钮的统一样式
   const applyButtonStyles = {
@@ -251,7 +278,6 @@ function FixedNavBar() {
 
           {/* 普通导航菜单 */}
           <Flex
-            // border="1px solid blue"
             display={{ base: "none", md: "flex" }}
             gap="10px"
             position="absolute"
@@ -266,8 +292,8 @@ function FixedNavBar() {
               <Box
                 key={path}
                 color="white"
-                px={5}
-                py={1}
+                px={4}
+                py={2}
                 cursor="pointer"
                 _hover={{ color: "gray.200" }}
                 onClick={() => navigate(path)}
@@ -284,7 +310,6 @@ function FixedNavBar() {
       {/* Desktop Apply Button */}
       <Box 
         // width="200px" 
-        // border="1px solid red"
         display={{ base: "none", md: "flex" }} 
         justifyContent="flex-end"
       >

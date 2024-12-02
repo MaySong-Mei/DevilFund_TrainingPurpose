@@ -4,6 +4,7 @@ import DevilFundInfo from "@/components/components/DevilFundInfo";
 import ProjectModuleInfo from "@/components/components/ProjectModule-Info";
 import projects from "@/data/projects";
 import FixedNavBar from "@/components/FixedNavBar";
+import ProjectShowcase from "@/components/components/ProjectShowcase";
 
 function Home() {
   return (
@@ -40,9 +41,12 @@ function Home() {
               backdropFilter: "blur(100px)"
             }}
           />
-          {/* 第一区块内容 */}
+          {/* 第一区块内容：介绍Devil Fund 内容*/}
           <Box
-            pt={{ base: "80px", md: "100px" }}
+            pt={{ 
+              base: "20px", 
+              md: "70px" 
+            }}
             position="relative"
             zIndex={1}
           >
@@ -52,23 +56,23 @@ function Home() {
           </Box>
         </Box>
 
-        {/* 第二个区块 - 项目展示区 */}
+        {/* 第二个区块 - 项目展示区，2x2的项目展示格子 */}
         <Box
           id="first-section"
-          minHeight="100vh"
-          width="100%"
-          bg="gray.900"
+          // minHeight="100vh"
+          // width="100%"
+          // bg="white"
           position="relative"
         >
-          
+          <ProjectShowcase />
         </Box>
 
-        {/* 第三个区块 - 白色区域 */}
+        {/* 第三个区块 - 白色区域 Meet Devil Fund Founder*/}
         <Box
           id="second-section"
           minHeight="100vh"
           width="100%"
-          bg="white"
+          bg="gray.900"
           position="relative"
         >
           {/* 白色区域的内容 */}

@@ -3,14 +3,13 @@ import { Box, Heading, Text, Flex, Image, Button } from "@chakra-ui/react";
 function DevilFundInfo() {
   return (
     <Box
-      mt={10}
-      mb={10}
       bg="#0a1015, 0.2"
       borderRadius="3xl"
       justify="space-between"
       align="center"
       maxWidth="1180px"
       mx="auto"
+      mt={3}
       boxShadow="0px 4px 6px rgba(0, 0, 0, 0.6)"
       opacity={0.95}
       backdropFilter="blur(15px)"
