@@ -31,12 +31,12 @@ function ProjectShowcase() {
               fontWeight="normal"
               lineHeight="1.2"
               mt={10}
-              mb={10}
+              mb={5}
             //   border="1px solid blue"
             >
-              OUR SPONSORED PROJECTS{" "}
+              Our Sponsored Projects{" "}
               <br />
-              ARE MAKING CHANGES TO THE WORLD
+              Can Make a Difference
             </Heading>
           </Box>
           <Button
