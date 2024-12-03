@@ -17,6 +17,7 @@ function Home() {
           width="100%"
           position="relative"
           overflow="hidden"
+          height="fit-content"
         >
           {/* transball背景 */}
           <Box
@@ -59,9 +60,9 @@ function Home() {
         {/* 第二个区块 - 项目展示区，2x2的项目展示格子 */}
         <Box
           id="first-section"
-          // width="100%"
-          // bg="white"
           position="relative"
+          height="fit-content"
+          overflow="hidden"
         >
           <ProjectShowcase />
         </Box>
