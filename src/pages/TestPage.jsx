@@ -59,7 +59,6 @@ function Home() {
         {/* 第二个区块 - 项目展示区，2x2的项目展示格子 */}
         <Box
           id="first-section"
-          // minHeight="100vh"
           // width="100%"
           // bg="white"
           position="relative"
