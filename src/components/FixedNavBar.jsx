@@ -291,10 +291,10 @@ function FixedNavBar() {
         <Button
           {...applyButtonStyles}
           size={showPillNav ? "sm" : "md"}
-          fontSize={showPillNav ? "12px" : "14px"}
+          fontSize={showPillNav ? "12px" : "16px"}
           px={6}
           py={showPillNav ? 2 : 3}
-          bg={showPillNav ? "rgba(0, 0, 0, 0.75)" : "gray.900"}
+          bg={showPillNav ? "rgba(0, 0, 0, 0.75)" : "transparent"}
           color={showPillNav ? "white" : "white"}
           boxShadow={showPillNav ? "0px 4px 12px rgba(0, 0, 0, 0.15)" : "none"}
           _hover={{
