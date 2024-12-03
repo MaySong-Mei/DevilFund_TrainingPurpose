@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text, Button, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Button, Link, AspectRatio, Image } from "@chakra-ui/react";
 import { useState } from "react";
 
 // Time: 2024-12-02, Save
@@ -6,37 +6,108 @@ import { useState } from "react";
 function ProjectShowcase() {
   const [expandedBox, setExpandedBox] = useState(null);
   const [hoveredBox, setHoveredBox] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handleBoxClick = (side) => {
     setExpandedBox(expandedBox === side ? null : side);
   };
+// Save
+  // 修改未展开时的内容渲染
+  const renderCollapsedContent = (side) => {
+    return (
+      <AspectRatio 
+        ratio={16 / 9} 
+        width="100%"
+        height="100%"
+      >
+        <Box
+          as="video"
+          src="/path/to/your/video.mp4"
+          preload="metadata"
+          width="100%"
+          height="100%"
+          objectFit="cover"
+          borderRadius="0"
+        />
+      </AspectRatio>
+    );
+  };
 
-  // 额外内容区域的渲染函数
+  // 修改展开状态的视频播放器
+  const renderExpandedContent = (side) => {
+    if (!expandedBox || expandedBox !== side) return null;
+
+    return (
+      <Box position="relative" width="100%" height="100%">
+        <AspectRatio 
+          ratio={16 / 9} 
+          width="100%"
+          height="100%"
+        >
+          <Box
+            as="video"
+            src="/path/to/your/video.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            ref={(el) => {
+              if (el) {
+                el.controls = false;
+                isPlaying ? el.play() : el.pause();
+              }
+            }}
+            borderRadius="0"
+            objectFit="cover"
+          />
+        </AspectRatio>
+        
+        {/* 播放/暂停按钮 */}
+        <Box
+          position="absolute"
+          bottom="8"
+          left="8"
+          bg="rgba(0, 0, 0, 0.7)"
+          borderRadius="full"
+          width="40px"
+          height="40px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          color="white"
+          cursor="pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsPlaying(!isPlaying);
+          }}
+          _hover={{
+            bg: "rgba(0, 0, 0, 0.8)",
+            transform: "scale(1.1)",
+          }}
+          transition="all 0.2s"
+        >
+          {isPlaying ? "⏸" : "▶"}
+        </Box>
+      </Box>
+    );
+  };
+
+  // 修改额外内容的渲染函数
   const renderExtraContent = (side) => {
     if (!expandedBox || expandedBox !== side) return null;
 
     const content = {
       left: {
-        title: "AI-Powered Healthcare Assistant",
-        problem: "Healthcare Accessibility Gap",
-        features: [
-          "Real-time health monitoring",
-          "Predictive diagnosis assistance",
-          "Personalized treatment recommendations",
-          "Remote consultation platform"
-        ],
-        description: "Leveraging artificial intelligence to bridge the healthcare accessibility gap in underserved communities, providing 24/7 medical guidance and support. Leveraging artificial intelligence to bridge the healthcare accessibility gap in underserved communities, providing 24/7 medical guidance and support."
+        logo: "match:Point",
+        title: "match:Point",
+        subtitle: "Student Project and Job Finding",
+        description: "MatchPoint creates a seamless connection between students, professors, and industry leaders, fostering collaboration through research projects, internships, and startup opportunities."
       },
       right: {
-        title: "Sustainable Energy Network",
-        problem: "Clean Energy Distribution",
-        features: [
-          "Smart grid integration",
-          "Peer-to-peer energy trading",
-          "Renewable source optimization",
-          "Community power sharing"
-        ],
-        description: "Building a decentralized clean energy network that enables communities to generate, store, and trade renewable energy efficiently. Leveraging artificial intelligence to bridge the healthcare accessibility gap in underserved communities, providing 24/7 medical guidance and support."
+        logo: "Good Energy Network",
+        title: "Good Energy Network",
+        subtitle: "Sustainable Energy Solutions",
+        description: "Building a decentralized clean energy network that enables communities to generate, store, and trade renewable energy efficiently."
       }
     };
 
@@ -49,128 +120,107 @@ function ProjectShowcase() {
         width="42%"
         height="100%"
         p={8}
-        pl={side === 'right' ? 0 : 8}
-        pr={side === 'left' ? 0 : 8}
         opacity={expandedBox === side ? 1 : 0}
         transition="opacity 0.3s ease"
-        pointerEvents={expandedBox === side ? "auto" : "none"}
-        textAlign="left"
       >
-        <Flex
-          direction="column"
-          height="100%"
+        <Flex 
+          direction="column" 
+          height="100%" 
           justify="space-between"
-          ml={side === 'right' ? 0 : "auto"}
-          mr={side === 'left' ? 0 : "auto"}
         >
-          {/* 上部分：标题和主要内容 */}
-          <Box>
-            <Heading
-              as="h3"
-              size="lg"
-              color="gray.800"
-              mb={6}
-              fontWeight="medium"
+          {/* 上部分：Logo和项目信息 */}
+          <Flex gap={8} mb={8}>
+            {/* Logo容器 */}
+            <Box 
+              width="60px" 
+              height="60px" 
+              bg="gray.100" 
+              borderRadius="md"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
             >
-              {content[side].title}
-            </Heading>
+              {/* 这里可以替换为实际的Logo */}
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" fill="#718096"/>
+              </svg>
+            </Box>
 
-            <Box mb={8}>
-              <Text
-                fontSize="md"
-                color="gray.500"
-                textTransform="uppercase"
-                letterSpacing="wider"
-                mb={2}
+            {/* 文字部分容器 */}
+            <Flex 
+              direction="column" 
+              justify="center"
+            >
+              <Heading 
+                as="h3" 
+                size="lg"
+                color="gray.900"
+                fontWeight="semibold"
+                mb={1}
               >
-                Social Impact
-              </Text>
-              <Text
-                fontSize="lg"
-                color="gray.700"
-                fontWeight="medium"
-                mb={4}
-              >
-                {content[side].problem}
-              </Text>
-              <Text
-                fontSize="md"
+                {content[side].title}
+              </Heading>
+              <Text 
+                fontSize="md" 
                 color="gray.600"
-                lineHeight="tall"
-                mb={6}
+                fontWeight="normal"
               >
-                {content[side].description}
+                {content[side].subtitle}
               </Text>
-            </Box>
+            </Flex>
+          </Flex>
+{/* Save */}
+          {/* 中部：项目描述 */}
+          <Text 
+            fontSize="md" 
+            color="gray.600" 
+            my={8}
+          >
+            {content[side].description}
+          </Text>
 
-            <Box mb={8}>
-              <Text
+          {/* 底部：链接和按钮 */}
+          <Flex justify="space-between" align="flex-end">
+            {/* 左侧链接 */}
+            <Flex 
+              direction="column" 
+              gap={2}
+            >
+              <Link
+                color="gray.700"
                 fontSize="md"
-                color="gray.500"
-                textTransform="uppercase"
-                letterSpacing="wider"
-                mb={3}
+                _hover={{ color: "gray.900" }}
               >
-                Key Features
-              </Text>
-              <Flex direction="column" gap={2}>
-                {content[side].features.map((feature, index) => (
-                  <Text
-                    key={index}
-                    fontSize="md"
-                    color="gray.700"
-                  >
-                    • {feature}
-                  </Text>
-                ))}
-              </Flex>
-            </Box>
+                → Team & Partners
+              </Link>
+              <Link
+                color="gray.700"
+                fontSize="md"
+                _hover={{ color: "gray.900" }}
+              >
+                → Impact Report
+              </Link>
+              <Link
+                color="gray.700"
+                fontSize="md"
+                _hover={{ color: "gray.900" }}
+              >
+                → Technical Documentation
+              </Link>
+            </Flex>
 
+            {/* 右侧按钮 */}
             <Button
-              size="lg"
-              bg="gray.900"
+              bg="black"
               color="white"
-              px={8}
-              height="56px"
+              size="md"
+              px={6}
               _hover={{
                 bg: "gray.800",
-                transform: "translateY(-2px)",
-                boxShadow: "lg"
               }}
-              transition="all 0.2s"
             >
               Open Demo
             </Button>
-          </Box>
-
-          {/* 下部分：链接区 */}
-          <Flex 
-            direction="column" 
-            gap={4}
-            maxW="90%"
-            mt={8}
-          >
-            <Link
-              color="gray.700"
-              fontSize="lg"
-              _hover={{ color: "gray.900", textDecoration: "none" }}
-            >
-              → Technical Documentation
-            </Link>
-            <Link
-              color="gray.700"
-              fontSize="lg"
-              _hover={{ color: "gray.900", textDecoration: "none" }}
-            >
-              → Impact Report
-            </Link>
-            <Link
-              color="gray.700"
-              fontSize="lg"
-              _hover={{ color: "gray.900", textDecoration: "none" }}
-            >
-              → Team & Partners
-            </Link>
           </Flex>
         </Flex>
       </Box>
@@ -263,12 +313,8 @@ function ProjectShowcase() {
             position="relative"
             flex="1"
             minW={{ base: "100%", md: "49%" }}
-            maxW={{ base: "100%", md: expandedBox === 'left' ? "52%" : 
-              expandedBox === 'right' ? "0%" : "49%" 
-            }}
-            bg="gray.50"
-            p={8}
-            height={expandedBox === 'left' ? "auto" : "600px"}
+            maxW={{ base: "100%", md: expandedBox === 'left' ? "52%" : "49%" }}
+            bg="white"
             border="1px solid"
             borderColor="gray.200"
             transition="all 0.5s ease"
@@ -288,72 +334,7 @@ function ProjectShowcase() {
               transform: expandedBox === 'left' ? "scale(1.06)" : "translateY(-2px)"
             }}
           >
-            {expandedBox === 'left' ? (
-              // 展开时的详细内容
-              <Box>
-                <Heading size="xl" mb={6}>Detailed Project Information</Heading>
-                <Text fontSize="xl" color="gray.700" mb={4}>
-                  Start your journey with Devil Fund's innovative projects that challenge the status quo and create meaningful impact.
-                </Text>
-                <Text fontSize="lg" color="gray.600" mb={4}>
-                  Our projects focus on:
-                  • Revolutionary technology solutions
-                  • Sustainable development
-                  • Social impact initiatives
-                  • Market-disrupting innovations
-                </Text>
-                <Text fontSize="lg" color="gray.600" mb={6}>
-                  We provide comprehensive support including:
-                  • Financial backing
-                  • Technical expertise
-                  • Market access
-                  • Strategic guidance
-                </Text>
-                <Button
-                  size="lg"
-                  bg="gray.900"
-                  color="white"
-                  _hover={{ bg: "gray.700" }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // 处理按钮点击
-                  }}
-                >
-                  Learn More About Projects
-                </Button>
-                <Button
-                  size="lg"
-                  ml={4}
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setExpandedBox(null);
-                  }}
-                >
-                  Close
-                </Button>
-              </Box>
-            ) : (
-              // 未展开时的简略内容
-              <>
-                <Text fontSize="xl" color="gray.700" mb={4}>
-                  Start your journey with Devil Fund's innovative projects that challenge the status quo and create meaningful impact.
-                </Text>
-                <Button
-                  size="lg"
-                  bg="gray.900"
-                  color="white"
-                  _hover={{ bg: "gray.700" }}
-                  mt={4}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleBoxClick('left');
-                  }}
-                >
-                  Explore Projects
-                </Button>
-              </>
-            )}
+            {expandedBox === 'left' ? renderExpandedContent('left') : renderCollapsedContent('left')}
 
             {/* 左边卡片的项目名称 - 左对齐 */}
             <Text
@@ -378,12 +359,8 @@ function ProjectShowcase() {
             position="relative"
             flex="1"
             minW={{ base: "100%", md: "49%" }}
-            maxW={{ base: "100%", md: expandedBox === 'right' ? "52%" :
-              expandedBox === 'left' ? "0%" : "49%"
-            }}
-            bg="gray.50"
-            p={8}
-            height={expandedBox === 'right' ? "auto" : "600px"}
+            maxW={{ base: "100%", md: expandedBox === 'right' ? "52%" : "49%" }}
+            bg="white"
             border="1px solid"
             borderColor="gray.200"
             transition="all 0.5s ease"
@@ -403,72 +380,7 @@ function ProjectShowcase() {
               transform: expandedBox === 'right' ? "scale(1.06)" : "translateY(-2px)"
             }}
           >
-            {expandedBox === 'right' ? (
-              // 展开时的详细内容
-              <Box>
-                <Heading size="xl" mb={6}>Join Our Community</Heading>
-                <Text fontSize="xl" color="gray.700" mb={4}>
-                  Be part of a thriving ecosystem of innovators and disruptors who are reshaping industries through groundbreaking solutions.
-                </Text>
-                <Text fontSize="lg" color="gray.600" mb={4}>
-                  Community benefits include:
-                  • Network with industry leaders
-                  • Access to exclusive events
-                  • Collaborative opportunities
-                  • Resource sharing
-                </Text>
-                <Text fontSize="lg" color="gray.600" mb={6}>
-                  Member privileges:
-                  • Priority project consideration
-                  • Mentorship programs
-                  • Investment opportunities
-                  • Regular workshops
-                </Text>
-                <Button
-                  size="lg"
-                  bg="gray.900"
-                  color="white"
-                  _hover={{ bg: "gray.700" }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // 处理按钮点击
-                  }}
-                >
-                  Join Now
-                </Button>
-                <Button
-                  size="lg"
-                  ml={4}
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setExpandedBox(null);
-                  }}
-                >
-                  Close
-                </Button>
-              </Box>
-            ) : (
-              // 未展开时的简略内容
-              <>
-                <Text fontSize="xl" color="gray.700" mb={4}>
-                  Join our community of innovators and disruptors who are reshaping industries through groundbreaking solutions.
-                </Text>
-                <Button
-                  size="lg"
-                  bg="gray.900"
-                  color="white"
-                  _hover={{ bg: "gray.700" }}
-                  mt={4}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleBoxClick('right');
-                  }}
-                >
-                  Join Community
-                </Button>
-              </>
-            )}
+            {expandedBox === 'right' ? renderExpandedContent('right') : renderCollapsedContent('right')}
 
             {/* 右边卡片的项目名称 - 右对齐 */}
             <Text
