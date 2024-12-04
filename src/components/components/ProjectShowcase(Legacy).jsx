@@ -1,7 +1,10 @@
 import { Box, Flex, Heading, Text, Button, Link, AspectRatio, Image } from "@chakra-ui/react";
 import { useState } from "react";
+import ProjectShowcaseHeader from './ProjectShowcaseHeader';
 
-// Time: 2024-12-02, Save
+// 不建议模块化这里，因为这里需要使用全局状态，
+// 如果模块化，需要将全局状态传递给子组件，
+// 这样会导致代码复杂度增加，不利于维护。 
 
 function ProjectShowcase() {
   const [expandedBox, setExpandedBox] = useState(null);
@@ -12,6 +15,7 @@ function ProjectShowcase() {
     setExpandedBox(expandedBox === side ? null : side);
   };
 // Save
+// Save (now split into two components)
   // 修改未展开时的内容渲染
   const renderCollapsedContent = (side) => {
     return (
@@ -236,78 +240,9 @@ function ProjectShowcase() {
         align="left"
         px={4}
       >
-        {/* 标题部分 */}
-        <Flex 
-        justify="space-between" 
-        align="center" 
-        mb={5}
-        // border="1px solid red"
-        >
-          <Box>
-            <Heading
-              as="h2"
-              size="3xl"
-              color="gray.800"
-              fontWeight="normal"
-              lineHeight="1.2"
-              mt={10}
-              mb={5}
-            //   border="1px solid blue"
-            >
-              Our Sponsored Projects{" "}
-              <br />
-              Can Make a Difference
-            </Heading>
-          </Box>
-          <Button
-            alignSelf="flex-end"
-            size="sm"
-            position="relative"
-            overflow="hidden"
-            bg="white"
-            color="gray.900"
-            px={6}
-            mb={10}
-            height="45px"
-            fontSize="sm"
-            fontWeight="light"
-            border="1px solid"
-            borderColor="gray.400"
-            borderRadius="0"
-            transition="all 0.2s ease"
-            _after={{
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "gray.900",
-              transform: "translateX(-100%)",
-              transition: "transform 0.3s ease",
-              zIndex: -1,
-            }}
-            _hover={{
-              "& > *": {
-                color: "white",
-                transition: "color 0.2s ease",
-              },
-              _after: {
-                transform: "translateX(0)",
-              },
-            }}
-            sx={{
-              '& > *': {
-                position: 'relative',
-                zIndex: 1,
-              },
-            }}
-          >
-            <span>VISIT STARTUP FACTORY</span>
-          </Button>
-        </Flex>
-
-        {/* 内容部分 */}
+        <ProjectShowcaseHeader />
+        
+        {/* 项目展示部分 */}
         <Flex gap={1} width="100%" flexWrap="wrap" justify="space-between" position="relative">
           <Box
             position="relative"

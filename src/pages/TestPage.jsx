@@ -4,7 +4,8 @@ import DevilFundInfo from "@/components/components/DevilFundInfo";
 import ProjectModuleInfo from "@/components/components/ProjectModule-Info";
 import projects from "@/data/projects";
 import FixedNavBar from "@/components/FixedNavBar";
-import ProjectShowcase from "@/components/components/ProjectShowcase";
+// import ProjectShowcase from "@/components/components/ProjectShowcase(Legacy)";
+import ProjectShowcaseModulized from "@/components/components/ProjectShowcase-Modulized";
 
 function Home() {
   return (
@@ -49,6 +50,7 @@ function Home() {
               md: "70px" 
             }}
             position="relative"
+            height="fit-content"
             zIndex={1}
           >
             <FixedNavBar />
@@ -57,17 +59,19 @@ function Home() {
           </Box>
         </Box>
 
-        {/* 第二个区块 - 项目展示区，2x2的项目展示格子 */}
+        {/* 第二个区块 - 白色区域 项目展示区，2x2的项目展示格子 */}
         <Box
           id="first-section"
           position="relative"
           height="fit-content"
           overflow="hidden"
         >
-          <ProjectShowcase />
+          {/* <ProjectShowcaseHeader /> */}
+          <ProjectShowcaseModulized />
+          {/* <ProjectShowcase /> */}
         </Box>
 
-        {/* 第三个区块 - 白色区域 Meet Devil Fund Founder*/}
+        {/* 第三个区块 - Meet Devil Fund Founder*/}
         <Box
           id="second-section"
           minHeight="100vh"
