@@ -181,7 +181,7 @@ function ProjectShowcaseContent() {
       flexWrap="wrap" 
       justify="space-between" 
       position="relative"
-      mb={20}
+      mb={40}
     >
       <Box
         position="relative"

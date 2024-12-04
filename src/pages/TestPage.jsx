@@ -43,7 +43,7 @@ function Home() {
               backdropFilter: "blur(100px)"
             }}
           />
-          {/* 第一区块内容：介绍Devil Fund 内容*/}
+          {/* 第零区块内容：介绍Devil Fund 内容*/}
           <Box
             pt={{ 
               base: "20px", 
@@ -59,7 +59,7 @@ function Home() {
           </Box>
         </Box>
 
-        {/* 第二个区块 - 白色区域 项目展示区，2x2的项目展示格子 */}
+        {/* 第一个区块 - 白色区域 项目展示区，2x2的项目展示格子 */}
         <Box
           id="first-section"
           position="relative"
@@ -71,7 +71,7 @@ function Home() {
           {/* <ProjectShowcase /> */}
         </Box>
 
-        {/* 第三个区块 - Meet Devil Fund Founder*/}
+        {/* 第二个区块 - AI项目*/}
         <Box
           id="second-section"
           minHeight="100vh"
@@ -82,7 +82,7 @@ function Home() {
           {/* 白色区域的内容 */}
         </Box>
 
-        {/* 可以添加第三个区块 */}
+        {/* 第三个区块 */}
         <Box
           id="third-section"
           minHeight="100vh"

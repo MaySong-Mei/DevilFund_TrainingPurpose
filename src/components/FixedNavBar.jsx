@@ -21,9 +21,9 @@ function FixedNavBar() {
 
   // 位置导航项
   const sectionNavItems = [
-    { title: "1st", id: "first-section" },
-    { title: "2nd", id: "second-section" },
-    { title: "3rd", id: "third-section" }
+    { title: "Platform_Solutions", id: "first-section" },
+    { title: "Artificial_Intelligence", id: "second-section" },
+    { title: "Physical_Products", id: "third-section" }
   ];
   
   const navigate = useNavigate();
