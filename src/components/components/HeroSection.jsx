@@ -1,11 +1,29 @@
 import { Box, Container, Stack, Heading, Button, SimpleGrid, Text } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { motion } from "framer-motion";
 import { FaLightbulb, FaRocket, FaChartLine } from "react-icons/fa";
-import AnimatedBackground from './AnimatedBackground';
 import AnimatedBackground_random from './AnimatedBackground_random';
-import DevilFundInfo from "./DevilFundInfo";
+import IntroAnimation from './IntroAnimation';
+import { useState } from 'react';
+
+const glow = keyframes`
+  0%, 100% {
+    text-shadow: 
+      0 0 4px rgba(52, 211, 153, 0.3),
+      0 0 8px rgba(52, 211, 153, 0.3),
+      0 0 12px rgba(52, 211, 153, 0.3);
+  }
+  50% {
+    text-shadow: 
+      0 0 8px rgba(52, 211, 153, 0.5),
+      0 0 16px rgba(52, 211, 153, 0.5),
+      0 0 24px rgba(52, 211, 153, 0.5);
+  }
+`;
 
 const HeroSection = () => {
+  const [showContent, setShowContent] = useState(false);
+
   return (
     <Box
       minHeight="100vh"
@@ -16,38 +34,76 @@ const HeroSection = () => {
       display="flex"
       alignItems="center"
     >
-      {/* 背景动画 */}
-      {/* <AnimatedBackground /> */}
+      <IntroAnimation onComplete={() => setShowContent(true)} />
       <AnimatedBackground_random />
 
-      {/* 内容区域 */}
-      {/* <DevilFundInfo /> */}
       <Container 
         maxW="container.xl" 
         position="relative" 
         zIndex={1}
       >
+        <Box
+          position="absolute"
+          top="20px"
+          left="50%"
+          transform="translateX(-50%)"
+          width="400px"
+          textAlign="center"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Text
+            fontSize="6xl"
+            fontWeight="bold"
+            color="green.400"
+            css={{
+              animation: `${glow} 20s ease-in-out infinite`,
+              letterSpacing: "1px"
+            }}
+          >
+            NoPitch
+          </Text>
+          <Box
+            px="8px"
+            py="1px"
+            mt="-10px"
+            border="0px solid"
+            borderColor="green.400"
+            borderRadius="full"
+            background="transparent"
+          >
+            <Text
+              fontSize="md"
+              color="green.500"
+              letterSpacing="3px"
+              textTransform="uppercase"
+            >
+              Startup Originator
+            </Text>
+          </Box>
+        </Box>
+
         <Stack
           as={motion.div}
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          animate={{ opacity: showContent ? 1 : 0, y: showContent ? 0 : 20 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           spacing={12}
           align="center"
           py={20}
+          mt="100px"
         >
-          {/* 主标题 */}
           <Heading
             fontSize={{ base: "3xl", md: "5xl" }}
-            color="gray.800"
+            color="green.800"
             textAlign="center"
             fontWeight="bold"
-            maxW="800px"
+            maxW="1000px"
           >
-            重新定义创业孵化的未来
+            Build, Prove, Scale. No Fluff.
           </Heading>
 
-          {/* Feature 部分 */}
           <SimpleGrid 
             columns={{ base: 1, md: 3 }} 
             spacing={{ base: 8, md: 16 }}
@@ -72,7 +128,6 @@ const HeroSection = () => {
             />
           </SimpleGrid>
 
-          {/* CTA按钮 */}
           <Button
             as={motion.button}
             whileHover={{ scale: 1.05 }}
@@ -93,7 +148,6 @@ const HeroSection = () => {
   );
 };
 
-// Feature 组件
 const Feature = ({ title, text, icon: Icon }) => (
   <Stack 
     as={motion.div}

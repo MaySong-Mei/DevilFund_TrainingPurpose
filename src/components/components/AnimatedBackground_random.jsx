@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 const AnimatedBackground_random = ({ imagePositions }) => {
   const [particles, setParticles] = useState([]);
   const timerRef = useRef(null);
+  const isVisibleRef = useRef(true);
 
   const ANIMATION_DURATION = 3;
   const SPAWN_DELAY = ANIMATION_DURATION / 5;
@@ -59,7 +60,27 @@ const AnimatedBackground_random = ({ imagePositions }) => {
     return particles;
   };
 
+  // 添加页面可见性变化处理函数
+  const handleVisibilityChange = () => {
+    isVisibleRef.current = !document.hidden;
+    
+    if (document.hidden) {
+      // 页面隐藏时清除定时器和粒子
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      setParticles([]); // 清除所有粒子
+    } else {
+      // 页面可见时重新开始生成粒子
+      generateNewWave();
+    }
+  };
+
   const generateNewWave = () => {
+    // 只在页面可见时生成新的粒子
+    if (!isVisibleRef.current) return;
+
     const newParticles = createParticles();
     setParticles(prev => [...prev, ...newParticles]);
 
@@ -73,12 +94,16 @@ const AnimatedBackground_random = ({ imagePositions }) => {
   };
 
   useEffect(() => {
+    // 添加页面可见性变化监听
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     generateNewWave();
     
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
+      // 清除监听器
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
