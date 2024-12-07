@@ -6,6 +6,10 @@ import AnimatedBackground_random from './AnimatedBackground_random';
 import IntroAnimation from './IntroAnimation';
 import { useState } from 'react';
 
+//Todo: 
+//1. 添加动画：小点聚集成NoPitch或者聚集成build, prove, scale
+//2. 添加Vistor, Founder, Investor三个角色button入口
+
 const glow = keyframes`
   0%, 100% {
     text-shadow: 
