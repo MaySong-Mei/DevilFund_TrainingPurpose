@@ -74,7 +74,7 @@ const IntroAnimation = ({ onComplete }) => {
         width="400px"
         textAlign="center"
         animate={step >= 1 ? { 
-          y: -235,
+          y: -173,//位置移动
           opacity: 1
         } : { 
           y: 0,

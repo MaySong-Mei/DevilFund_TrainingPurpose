@@ -2,17 +2,18 @@ import { Box } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 
-const AnimatedBackground_random = ({ imagePositions }) => {
+const AnimatedBackground_random = ({ particleColor = "rgba(52, 211, 153, 0.9)" }) => {
   const [particles, setParticles] = useState([]);
   const timerRef = useRef(null);
   const isVisibleRef = useRef(true);
+  const particleCountRef = useRef(0);
 
   const ANIMATION_DURATION = 3;
   const SPAWN_DELAY = ANIMATION_DURATION / 5;
   const MARGIN = 10;
   const FADE_IN_DURATION = 0.4;
   const COLOR_DURATION = 1;
-
+  //Save
   // 生成随机边缘位置的函数
   const getRandomEdgePosition = () => {
     const edge = Math.floor(Math.random() * 4); // 0-3 分别代表上、右、下、左四条边
@@ -41,19 +42,20 @@ const AnimatedBackground_random = ({ imagePositions }) => {
   };
 
   const createParticles = () => {
-    // 每次生成10个随机粒子
     const particleCount = Math.floor(Math.random() * 10) + 10;
     const particles = [];
 
     for (let i = 0; i < particleCount; i++) {
       const position = getRandomEdgePosition();
+      particleCountRef.current += 1;
       particles.push({
-        id: Date.now() + Math.random(),
+        id: `particle-${Date.now()}-${particleCountRef.current}`,
         startX: position.x,
         startY: position.y,
-        size: Math.random() * 10 + 15, // 随机大小 15-25px
+        size: Math.random() * 10 + 15,
         duration: ANIMATION_DURATION,
-        colorDuration: COLOR_DURATION
+        colorDuration: COLOR_DURATION,
+        color: particleColor
       });
     }
 
@@ -107,6 +109,15 @@ const AnimatedBackground_random = ({ imagePositions }) => {
     };
   }, []);
 
+  useEffect(() => {
+    // 当颜色改变时，清除现有粒子并重新开始
+    setParticles([]);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    generateNewWave();
+  }, [particleColor]);
+
   return (
     <Box
       position="absolute"
@@ -133,7 +144,7 @@ const AnimatedBackground_random = ({ imagePositions }) => {
               x: window.innerWidth / 2,
               y: window.innerHeight / 2,
               scale: 0,
-              backgroundColor: "rgba(52, 211, 153, 0.9)"
+              backgroundColor: particle.color
             }}
             transition={{
               opacity: {
@@ -165,7 +176,7 @@ const AnimatedBackground_random = ({ imagePositions }) => {
               width: `${particle.size}px`,
               height: `${particle.size}px`,
               borderRadius: "50%",
-              boxShadow: `0 0 ${particle.size/2}px rgba(52, 211, 153, 0.3)`,
+              boxShadow: `0 0 ${particle.size/2}px ${particle.color}`,
             }}
           />
         ))}
