@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from "framer-motion";
 
-const MotionText = motion(Text);
-const MotionBox = motion(Box);
+// 创建自定义motion组件
+const MotionBox = motion.create(Box);
+const MotionText = motion.create(Text);
 
 const IntroAnimation = ({ onComplete }) => {
   const [step, setStep] = useState(0);
